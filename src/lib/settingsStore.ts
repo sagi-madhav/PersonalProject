@@ -49,7 +49,7 @@ const defaultSettings = {
   keepScreenAwake: true,
   hapticsEnabled: true,
 
-  unit: 'kg' as const,
+  unit: 'lb' as const,
   defaultRestSec: 90,
   showRpe: false,
   weightStep: 2.5,

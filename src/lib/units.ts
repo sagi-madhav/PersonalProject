@@ -58,3 +58,25 @@ export function calculateSetVolume(
   }
   return weightKg * reps;
 }
+
+export function getDualWeightDisplay(
+  kg: number | null | undefined,
+  primaryUnit: 'kg' | 'lb' = 'lb'
+): { primary: string; secondary: string } {
+  if (kg == null || isNaN(kg) || kg <= 0) {
+    return {
+      primary: '—',
+      secondary: '',
+    };
+  }
+  if (primaryUnit === 'lb') {
+    const lb = kgToLb(kg);
+    const primaryStr = `${(Math.round(lb * 2) / 2).toFixed(1).replace(/\.0$/, '')} lb`;
+    const secondaryStr = `${(Math.round(kg * 2) / 2).toFixed(1).replace(/\.0$/, '')} kg`;
+    return { primary: primaryStr, secondary: secondaryStr };
+  }
+  const lb = kgToLb(kg);
+  const primaryStr = `${(Math.round(kg * 2) / 2).toFixed(1).replace(/\.0$/, '')} kg`;
+  const secondaryStr = `${(Math.round(lb * 2) / 2).toFixed(1).replace(/\.0$/, '')} lb`;
+  return { primary: primaryStr, secondary: secondaryStr };
+}
