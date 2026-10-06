@@ -42,12 +42,38 @@
    - Sub-routes for learn and train.
    - Route documentation in `docs/ROUTES.md`.
 
-## Next Phase: Phase 1 — Feature Agents
-Roster per Section 16.6:
-- `timeline` (M3a): Timeline Hour + 12h, now line, gaps, block layout
-- `blocks-calendar` (M3b, M5): Quick-add sheet, Inbox sheet, rollover, month grid + agenda
-- `focus` (M4): Timer UI, modes, notifications, session log, stats
-- `train` (M6): Exercise library, photos, workout logger, history
-- `learn` (M7): Content loader, lesson view, review ladder, DSA tracker, system design
-- `content`: Bundled lessons
-- `settings` (M2b): Settings screen & JSON backup/restore
+## Milestone: Phase 1 — Settings & Backup (Completed)
+- **Tag:** `settings-v1`
+- **Quality Gates:** All passing (Unit tests for JSON schema validate/export/import).
+
+## Milestone: Phase 1 — Focus & Timers (Completed)
+- **Tag:** `focus-v1`
+- **Quality Gates:** All passing (Timer engine, background timestamps, notifications, 7-day sparkline).
+
+## Milestone: Phase 1 — Today Timeline (Completed)
+- **Tag:** `timeline-v1`
+- **Quality Gates:** All passing (Packing algorithm, hour markers, 12h formatting, now-line, gaps).
+
+## Milestone: Phase 1 — Blocks & Calendar (Completed)
+- **Tag:** `blocks-calendar-v1`
+- **Quality Gates:** All passing (Month grid calculation, quick-add sheet, inbox triage, rollover banner).
+
+## Milestone: Phase 1 — Train (Completed)
+- **Tag:** `train-v1`
+- **Quality Gates:**
+  - `npx tsc --noEmit`: PASS (0 errors)
+  - `npx expo lint`: PASS (0 errors, 0 warnings)
+  - `npm test`: PASS (24/24 tests passed across 6 suites)
+  - Ownership: Checked via `node scripts/check-ownership.mjs train` (PASS)
+- **Deliverables:**
+  - `src/features/train/previous.ts` & unit tests (`previous.test.ts`): Fast previous set lookups (Hevy-style).
+  - `src/features/train/seedExercises.ts`: 17 curated exercises for Upper / Lower + Biceps split with auto-seeding.
+  - `src/features/train/RestBar.tsx`: Floating rest countdown bar with -15s/+15s and skip.
+  - `app/(tabs)/train/exercises/index.tsx` & `[id].tsx`: Exercise library, search, muscle filter, machine setup & swipeable photo carousel with camera/picker support.
+  - `app/workout/active.tsx`: Full-screen workout logger with draft persistence in AsyncStorage, dual weight live conversion (primary `lb` + secondary `kg`), auto rest trigger, PR detection, keep-awake.
+  - `app/(tabs)/train/history.tsx`: Workout history list with sets count, duration, and volume.
+  - `app/(tabs)/train/index.tsx`: Train home dashboard with dynamic Start/Resume CTA, 7-day workout activity dots, this-week volume & session stats, and recent workout cards.
+
+## Next Milestone: Phase 1 — Learn & Content (M7)
+- `learn` (M7): Content loader, lesson markdown view, spaced review ladder (1, 3, 7, 14, 30, 60 days), DSA problem tracker, System Design building blocks & case studies.
+- `content`: Bundled starter lessons for Python 101, DSA 101, System Design.
