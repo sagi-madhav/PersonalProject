@@ -1,0 +1,43 @@
+{
+  "_allowedEverywhere": [
+    "docs/STATUS.md",
+    "docs/CONTRACT_CHANGES.md"
+  ],
+  "timeline": [
+    "app/(tabs)/index.tsx",
+    "src/features/today/"
+  ],
+  "blocks-calendar": [
+    "app/block/",
+    "app/inbox.tsx",
+    "app/(tabs)/calendar.tsx",
+    "src/features/blocks/",
+    "src/features/calendar/"
+  ],
+  "focus": [
+    "app/(tabs)/focus.tsx",
+    "src/features/focus/",
+    "src/lib/notifications.ts",
+    "src/lib/useTimer.ts"
+  ],
+  "train": [
+    "app/(tabs)/train/",
+    "app/workout/",
+    "src/features/train/"
+  ],
+  "learn": [
+    "app/(tabs)/learn/",
+    "src/features/learn/"
+  ],
+  "content": [
+    "content/"
+  ],
+  "settings": [
+    "app/settings.tsx",
+    "src/features/settings/",
+    "src/lib/backup.ts"
+  ],
+  "integrator": [
+    "src/features/integration/"
+  ]
+}
