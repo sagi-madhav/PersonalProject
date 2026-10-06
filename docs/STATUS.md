@@ -95,6 +95,19 @@
   - `app/(tabs)/learn/system-design-deck.tsx`: Interactive cards for 12 building blocks and 8 case studies.
   - `app/(tabs)/learn/case-study/[id].tsx`: Case study template notes page with the 7 fixed engineering sections and JSON persistence in `learn_progress.notes`.
 
-## Next Phase: Phase 2 — Integrator & Polish (M8, M9)
-- Cross-feature connections: Focus session time logging to `learn_progress`, workouts logged appearing as outline blocks on Today timeline.
-- Final Expo Go verification and launch via `npx expo start`.
+## Milestone: Phase 2 — Integrator & Polish (Completed)
+- **Tag:** `app-v1`
+- **Quality Gates:**
+  - `npx tsc --noEmit`: PASS (0 errors)
+  - `npx expo lint`: PASS (0 errors, 0 warnings)
+  - `npm test`: PASS (29/29 tests passed across 7 suites)
+  - `npx expo-doctor`: PASS (21/21 checks passed)
+- **Deliverables & Cross-Feature Integration:**
+  - **Focus → Learn:** Completed focus sessions with a topic ID automatically increment `learn_progress.time_spent_ms`.
+  - **Focus → Today:** Completed focus sessions create an outlined `focus` block on Today's timeline at the actual session time.
+  - **Train → Today & Calendar:** Finished workouts automatically create an outlined `workout` block on Today's timeline and mark the Calendar day with a health activity dot.
+  - **Learn → Schedule:** Tapping "Schedule Study" inside any lesson opens the Block Editor pre-filled with `kind: 'study'`, title, and `link_type: 'topic'`.
+  - **Block → Lesson/Workout:** Blocks with topic or workout links display direct navigation buttons to jump straight into the linked lesson or workout history.
+  - **Block → Focus:** Editing any existing task block provides a one-tap "Start Focus Session" action with the block title pre-populated as the timer label.
+  - **Learn Tab Review Badge:** The tab bar displays a live accent dot badge on the "Learn" tab whenever cards are due for spaced review.
+  - **100% Offline, Zero Network Calls:** Verified fully functional with local SQLite storage and AsyncStorage persistence.

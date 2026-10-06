@@ -18,6 +18,8 @@ import { useTheme } from '../../src/theme';
 import { useSettingsStore } from '../../src/lib/settingsStore';
 import { workoutsRepo } from '../../src/db/repos/workoutsRepo';
 import { exercisesRepo } from '../../src/db/repos/exercisesRepo';
+import { blocksRepo } from '../../src/db/repos/blocksRepo';
+import { format } from 'date-fns';
 import { ExerciseRecord, WorkoutSetRecord } from '../../src/db/types';
 import { useRestTimer } from '../../src/lib/useTimer';
 import { RestBar } from '../../src/features/train/RestBar';
@@ -258,6 +260,28 @@ export default function ActiveWorkoutScreen() {
                 }
               }
             }
+
+            // Create Today timeline overlay block
+            const startDate = new Date(startedAt);
+            const dateKey = format(startDate, 'yyyy-MM-dd');
+            const startMin = startDate.getHours() * 60 + startDate.getMinutes();
+            const durationMin = Math.max(10, Math.round((endedAt - startedAt) / 60000));
+
+            await blocksRepo.insert({
+              id: Crypto.randomUUID(),
+              title: workoutTitle || 'Workout',
+              kind: 'workout',
+              category: 'health',
+              date: dateKey,
+              start_min: startMin,
+              duration_min: durationMin,
+              done_at: endedAt,
+              notes: null,
+              link_type: 'workout',
+              link_id: workoutId,
+              created_at: Date.now(),
+              updated_at: Date.now(),
+            });
 
             // Clear draft
             await AsyncStorage.removeItem(DRAFT_WORKOUT_KEY);

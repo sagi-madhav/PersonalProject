@@ -24,6 +24,8 @@ import {
 } from '../../src/lib/time';
 import { lightHaptic, notificationWarning } from '../../src/lib/haptics';
 
+import { getLessonById } from '../../content';
+
 const KINDS: { label: string; kind: BlockKind }[] = [
   { label: 'Task', kind: 'task' },
   { label: 'Event', kind: 'event' },
@@ -47,13 +49,21 @@ export default function BlockEditorScreen() {
     id: string;
     date?: string;
     startMin?: string;
+    title?: string;
+    kind?: BlockKind;
+    linkType?: 'topic' | 'workout';
+    linkId?: string;
   }>();
 
   const isNew = params.id === 'new';
 
-  const [title, setTitle] = useState('');
-  const [kind, setKind] = useState<BlockKind>('task');
-  const [selectedCat, setSelectedCat] = useState<BlockCategory>('other');
+  const [title, setTitle] = useState(params.title || '');
+  const [kind, setKind] = useState<BlockKind>(params.kind || 'task');
+  const [selectedCat, setSelectedCat] = useState<BlockCategory>(() => {
+    if (params.kind === 'study') return 'study';
+    if (params.kind === 'workout') return 'health';
+    return 'other';
+  });
   const [whenMode, setWhenMode] = useState<'inbox' | 'today' | 'tomorrow' | 'other'>(() => {
     if (params.date === undefined && isNew) return 'today';
     if (params.date === null || params.date === '') return 'inbox';
@@ -127,8 +137,8 @@ export default function BlockEditorScreen() {
         duration_min: finalDuration,
         done_at: null,
         notes: notes.trim() || null,
-        link_type: null,
-        link_id: null,
+        link_type: params.linkType || null,
+        link_id: params.linkId || null,
         created_at: now,
         updated_at: now,
       });
@@ -310,6 +320,41 @@ export default function BlockEditorScreen() {
           {/* Action Buttons */}
           <View style={styles.actionButtons}>
             <Button title="Save" variant="primary" onPress={handleSave} style={{ marginBottom: 12 }} />
+            {!isNew ? (
+              <Button
+                title="Start Focus Session"
+                variant="secondary"
+                onPress={() => {
+                  router.push({
+                    pathname: '/(tabs)/focus',
+                    params: { label: title },
+                  });
+                }}
+                style={{ marginBottom: 12 }}
+              />
+            ) : null}
+            {!isNew && existingBlock?.link_type === 'topic' && existingBlock.link_id ? (
+              <Button
+                title="Open Linked Lesson"
+                variant="secondary"
+                onPress={() => {
+                  const lesson = getLessonById(existingBlock.link_id!);
+                  const track = lesson ? lesson.track : 'python';
+                  router.push(`/(tabs)/learn/${track}/${existingBlock.link_id}` as any);
+                }}
+                style={{ marginBottom: 12 }}
+              />
+            ) : null}
+            {!isNew && existingBlock?.link_type === 'workout' ? (
+              <Button
+                title="View Workout History"
+                variant="secondary"
+                onPress={() => {
+                  router.push('/(tabs)/train/history');
+                }}
+                style={{ marginBottom: 12 }}
+              />
+            ) : null}
             {!isNew ? (
               <Button title="Delete Block" variant="quiet" onPress={handleDelete} />
             ) : null}

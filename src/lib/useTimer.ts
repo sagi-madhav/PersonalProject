@@ -19,6 +19,8 @@ import { useSettingsStore } from './settingsStore';
 import { scheduleTimerEndNotification, cancelNotification } from './notifications';
 import { focusRepo } from '../db/repos/focusRepo';
 import { learnRepo } from '../db/repos/learnRepo';
+import { blocksRepo } from '../db/repos/blocksRepo';
+import { format } from 'date-fns';
 import { notificationSuccess, lightHaptic } from './haptics';
 
 const TIMER_STORAGE_KEY = 'planner-active-timer-v1';
@@ -116,6 +118,28 @@ export function useTimer(
           if (prev.topicId && prev.plannedMs) {
             learnRepo.addTimeSpent(prev.topicId, prev.plannedMs).catch(console.error);
           }
+
+          // Create Today timeline overlay block
+          const sessionStart = new Date(prev.startedAt ?? current);
+          const dateKey = format(sessionStart, 'yyyy-MM-dd');
+          const startMin = sessionStart.getHours() * 60 + sessionStart.getMinutes();
+          const durationMin = Math.max(1, Math.round((prev.plannedMs ?? 0) / 60000));
+
+          blocksRepo.insert({
+            id: Crypto.randomUUID(),
+            title: prev.label || (prev.mode === 'pomodoro' ? 'Pomodoro Focus' : 'Focus Session'),
+            kind: 'focus',
+            category: prev.topicId ? 'study' : 'work',
+            date: dateKey,
+            start_min: startMin,
+            duration_min: durationMin,
+            done_at: current,
+            notes: null,
+            link_type: prev.topicId ? 'topic' : null,
+            link_id: prev.topicId ?? null,
+            created_at: current,
+            updated_at: current,
+          }).catch(console.error);
         }
         return reconciled;
       });

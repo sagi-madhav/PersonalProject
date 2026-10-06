@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useTheme } from '../../src/theme';
+import { learnRepo } from '../../src/db/repos/learnRepo';
 
 export default function TabLayout() {
   const { colors } = useTheme();
+  const [hasDueReviews, setHasDueReviews] = useState(false);
+
+  useEffect(() => {
+    let ignore = false;
+    learnRepo
+      .getDueReviews(Date.now())
+      .then((dues) => {
+        if (!ignore) {
+          setHasDueReviews(dues.length > 0);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return (
     <Tabs
@@ -55,6 +72,12 @@ export default function TabLayout() {
         name="learn"
         options={{
           title: 'Learn',
+          tabBarBadge: hasDueReviews ? '●' : undefined,
+          tabBarBadgeStyle: {
+            fontSize: 8,
+            color: colors.accent,
+            backgroundColor: 'transparent',
+          },
           tabBarIcon: ({ color }) => (
             <SymbolView name="book" tintColor={color} size={22} />
           ),
