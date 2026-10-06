@@ -74,6 +74,27 @@
   - `app/(tabs)/train/history.tsx`: Workout history list with sets count, duration, and volume.
   - `app/(tabs)/train/index.tsx`: Train home dashboard with dynamic Start/Resume CTA, 7-day workout activity dots, this-week volume & session stats, and recent workout cards.
 
-## Next Milestone: Phase 1 — Learn & Content (M7)
-- `learn` (M7): Content loader, lesson markdown view, spaced review ladder (1, 3, 7, 14, 30, 60 days), DSA problem tracker, System Design building blocks & case studies.
-- `content`: Bundled starter lessons for Python 101, DSA 101, System Design.
+## Milestone: Phase 1 — Learn & Content (Completed)
+- **Tag:** `learn-v1`
+- **Quality Gates:**
+  - `npx tsc --noEmit`: PASS (0 errors)
+  - `npx expo lint`: PASS (0 errors, 0 warnings)
+  - `npm test`: PASS (29/29 tests passed across 7 suites)
+  - Ownership: Checked via `node scripts/check-ownership.mjs learn` & `node scripts/check-ownership.mjs content` (PASS)
+- **Deliverables:**
+  - `src/features/learn/review.ts` & unit tests (`review.test.ts`): Spaced review ladder intervals [1, 3, 7, 14, 30, 60] days with Got it / Forgot state transitions.
+  - `content/`: Typed starter curriculum with 18 high-quality lessons across Python 101, DSA 101, and System Design:
+    - Python 101: 6 bundled lessons + Python Cheat Sheet markdown reference.
+    - DSA 101: 6 bundled lessons + 15 algorithm pattern categories.
+    - System Design: 6 bundled lessons + 12 architectural building blocks deck + 8 case studies.
+  - `app/(tabs)/learn/index.tsx`: Learn home dashboard with track segmented switcher (Python, DSA, System Design), track % progress, "Review due" card, module cards with progress bars, and track extras tiles.
+  - `app/(tabs)/learn/review.tsx`: Dedicated spaced review card session with tap-to-reveal key points and Got it / Forgot actions.
+  - `app/(tabs)/learn/[track]/[topicId].tsx`: Rich lesson reader with markdown formatting, status cycler, personal notes autosave, Start Focus action, and Schedule Study action.
+  - `app/(tabs)/learn/python-cheatsheet.tsx`: Fast syntax reference for slicing, comprehensions, and stdlib.
+  - `app/(tabs)/learn/dsa-problems.tsx`: LeetCode & DSA problems tracker with status stepper, attempts counter, difficulty filters, and "+ Add to Spaced Review" queue.
+  - `app/(tabs)/learn/system-design-deck.tsx`: Interactive cards for 12 building blocks and 8 case studies.
+  - `app/(tabs)/learn/case-study/[id].tsx`: Case study template notes page with the 7 fixed engineering sections and JSON persistence in `learn_progress.notes`.
+
+## Next Phase: Phase 2 — Integrator & Polish (M8, M9)
+- Cross-feature connections: Focus session time logging to `learn_progress`, workouts logged appearing as outline blocks on Today timeline.
+- Final Expo Go verification and launch via `npx expo start`.

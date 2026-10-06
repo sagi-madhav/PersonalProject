@@ -1,6 +1,8 @@
-// Stub for Learn feature api - to be populated by learn agent
+import { getLessonById } from '../../../content';
+
 export async function getLearnTopicTitle(topicId: string): Promise<string | null> {
-  // Stub implementation
   if (!topicId) return null;
+  const lesson = getLessonById(topicId);
+  if (lesson) return lesson.title;
   return topicId;
 }
