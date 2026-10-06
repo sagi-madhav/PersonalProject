@@ -111,8 +111,9 @@ export default function LessonScreen() {
   const handleScheduleStudy = () => {
     if (!lesson) return;
     router.push({
-      pathname: '/block/new',
+      pathname: '/block/[id]',
       params: {
+        id: 'new',
         title: `Study: ${lesson.title}`,
         kind: 'study',
         linkType: 'topic',
