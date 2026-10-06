@@ -1,11 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
+import * as Crypto from 'expo-crypto';
 import {
   TimerState,
   TimerMode,
   createInitialTimerState,
   startTimer,
   pauseTimer,
-  resumeTimer,
   stopTimer,
   getRemainingMs,
   getElapsedMs,
@@ -13,6 +16,12 @@ import {
   advancePomodoro,
 } from './timerEngine';
 import { useSettingsStore } from './settingsStore';
+import { scheduleTimerEndNotification, cancelNotification } from './notifications';
+import { focusRepo } from '../db/repos/focusRepo';
+import { learnRepo } from '../db/repos/learnRepo';
+import { notificationSuccess, lightHaptic } from './haptics';
+
+const TIMER_STORAGE_KEY = 'planner-active-timer-v1';
 
 export interface UseTimerReturn {
   state: TimerState;
@@ -37,35 +46,142 @@ export function useTimer(
   );
   const [now, setNow] = useState<number>(() => Date.now());
 
+  // Restore draft from AsyncStorage on mount
+  useEffect(() => {
+    async function restore() {
+      try {
+        const raw = await AsyncStorage.getItem(TIMER_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw) as TimerState;
+          const reconciled = reconcileTimer(parsed, Date.now());
+          setState(reconciled);
+        }
+      } catch (err) {
+        console.warn('Failed to restore timer draft', err);
+      }
+    }
+    restore();
+  }, []);
+
+  // Persist state to AsyncStorage
+  useEffect(() => {
+    AsyncStorage.setItem(TIMER_STORAGE_KEY, JSON.stringify(state)).catch(() => {});
+  }, [state]);
+
+  // Keep screen awake while running
+  useEffect(() => {
+    if (state.status === 'running' && settings.keepScreenAwake) {
+      activateKeepAwakeAsync('focus-timer').catch(() => {});
+    } else {
+      deactivateKeepAwake('focus-timer').catch(() => {});
+    }
+  }, [state.status, settings.keepScreenAwake]);
+
+  // AppState listener for reconciliation
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextStatus: AppStateStatus) => {
+      if (nextStatus === 'active') {
+        const current = Date.now();
+        setNow(current);
+        setState((prev) => reconcileTimer(prev, current));
+      }
+    });
+    return () => subscription.remove();
+  }, []);
+
   // Foreground tick
   useEffect(() => {
     if (state.status !== 'running') return;
     const interval = setInterval(() => {
       const current = Date.now();
       setNow(current);
-      setState((prev) => reconcileTimer(prev, current));
+      setState((prev) => {
+        const reconciled = reconcileTimer(prev, current);
+        if (reconciled.status === 'finished' && prev.status === 'running') {
+          // Finished just now!
+          notificationSuccess();
+          // Record session
+          focusRepo.insert({
+            id: Crypto.randomUUID(),
+            mode: prev.mode,
+            label: prev.label,
+            topic_id: prev.topicId,
+            planned_ms: prev.plannedMs,
+            actual_ms: prev.plannedMs ?? 0,
+            started_at: prev.startedAt ?? current,
+            ended_at: current,
+            completed: 1,
+          }).catch(console.error);
+
+          if (prev.topicId && prev.plannedMs) {
+            learnRepo.addTimeSpent(prev.topicId, prev.plannedMs).catch(console.error);
+          }
+        }
+        return reconciled;
+      });
     }, 250);
     return () => clearInterval(interval);
   }, [state.status]);
 
   const start = useCallback(() => {
-    setState((prev) => startTimer(prev, Date.now()));
+    const current = Date.now();
+    setState((prev) => {
+      const started = startTimer(prev, current);
+      if (started.endAt) {
+        const title = started.label || (started.phase === 'focus' ? 'Focus Session Finished' : 'Break Finished');
+        scheduleTimerEndNotification(started.endAt, title, 'Good job! Tap to check in.')
+          .then((notifId) => {
+            if (notifId) {
+              setState((s) => ({ ...s, notificationId: notifId }));
+            }
+          })
+          .catch(() => {});
+      }
+      return started;
+    });
   }, []);
 
   const pause = useCallback(() => {
-    setState((prev) => pauseTimer(prev, Date.now()));
+    setState((prev) => {
+      cancelNotification(prev.notificationId).catch(() => {});
+      return pauseTimer(prev, Date.now());
+    });
   }, []);
 
   const resume = useCallback(() => {
-    setState((prev) => resumeTimer(prev, Date.now()));
-  }, []);
+    start();
+  }, [start]);
 
   const stop = useCallback(() => {
-    setState((prev) => stopTimer(prev));
+    const current = Date.now();
+    setState((prev) => {
+      cancelNotification(prev.notificationId).catch(() => {});
+      const elapsed = getElapsedMs(prev, current);
+      if (elapsed > 60000) {
+        // Record early stop session if > 1 minute
+        focusRepo.insert({
+          id: Crypto.randomUUID(),
+          mode: prev.mode,
+          label: prev.label,
+          topic_id: prev.topicId,
+          planned_ms: prev.plannedMs,
+          actual_ms: elapsed,
+          started_at: prev.startedAt ?? current - elapsed,
+          ended_at: current,
+          completed: 0,
+        }).catch(console.error);
+
+        if (prev.topicId) {
+          learnRepo.addTimeSpent(prev.topicId, elapsed).catch(console.error);
+        }
+      }
+      return stopTimer(prev);
+    });
   }, []);
 
   const setMode = useCallback((mode: TimerMode, plannedMs?: number) => {
     setState((prev) => {
+      cancelNotification(prev.notificationId).catch(() => {});
       const ms =
         mode === 'stopwatch'
           ? null
@@ -136,11 +252,16 @@ export function useRestTimer(defaultDurationSec: number = 90): UseRestTimerRetur
     setRemainingSeconds(durationSec);
     setIsRunning(true);
 
+    const endAt = Date.now() + durationSec * 1000;
+    scheduleTimerEndNotification(endAt, 'Rest Over', 'Time for your next set!')
+      .catch(() => {});
+
     timerRef.current = setInterval(() => {
       setRemainingSeconds((prev) => {
         if (prev <= 1) {
           if (timerRef.current) clearInterval(timerRef.current);
           setIsRunning(false);
+          notificationSuccess();
           return 0;
         }
         return prev - 1;
@@ -149,6 +270,7 @@ export function useRestTimer(defaultDurationSec: number = 90): UseRestTimerRetur
   }, [defaultDurationSec]);
 
   const adjustRest = useCallback((deltaSec: number) => {
+    lightHaptic();
     setRemainingSeconds((prev) => Math.max(0, prev + deltaSec));
   }, []);
 
