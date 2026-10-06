@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Screen, Text, Button, Segmented, ProgressBar, Chip } from '../../src/components';
