@@ -7,8 +7,7 @@ import {
   TextInput,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
-import { Screen, Text, Button } from '../../../../src/components';
+import { Screen, Text, Button, AppIcon } from '../../../../src/components';
 import { useTheme } from '../../../../src/theme';
 import { getCaseStudies, CaseStudy } from '../../../../content';
 import { learnRepo } from '../../../../src/db/repos/learnRepo';
@@ -155,7 +154,7 @@ export default function CaseStudyDetailScreen() {
       <Screen edges={['top']} padHorizontal>
         <View style={styles.header}>
           <Pressable onPress={() => router.back()} style={styles.backBtn}>
-            <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+            <AppIcon name="chevron-back" color={colors.text} size={20} />
           </Pressable>
           <Text variant="title">Case Study Not Found</Text>
         </View>
@@ -172,7 +171,7 @@ export default function CaseStudyDetailScreen() {
             style={styles.backBtn}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+            <AppIcon name="chevron-back" color={colors.text} size={20} />
           </Pressable>
           <Text variant="bodyStrong" style={{ flex: 1 }} numberOfLines={1}>
             {caseStudy.title}

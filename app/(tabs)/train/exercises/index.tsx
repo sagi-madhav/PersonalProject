@@ -8,9 +8,8 @@ import {
   Alert,
 } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import * as Crypto from 'expo-crypto';
-import { Screen, Text, Chip, EmptyState } from '../../../../src/components';
+import { Screen, Text, Chip, EmptyState, AppIcon } from '../../../../src/components';
 import { useTheme } from '../../../../src/theme';
 import { exercisesRepo } from '../../../../src/db/repos/exercisesRepo';
 import { ExerciseRecord, MuscleGroup } from '../../../../src/db/types';
@@ -90,7 +89,7 @@ export default function ExercisesListScreen() {
             style={styles.backBtn}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+            <AppIcon name="chevron-back" color={colors.text} size={20} />
           </Pressable>
           <Text variant="title">Exercises</Text>
         </View>
@@ -101,18 +100,19 @@ export default function ExercisesListScreen() {
           accessibilityLabel="Create exercise"
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <SymbolView name="plus" tintColor={colors.accent} size={20} />
+          <AppIcon name="add" color={colors.accent} size={22} />
         </Pressable>
       </View>
 
       {/* Search Input */}
-      <View style={styles.searchRow}>
+      <View style={[styles.searchRow, { backgroundColor: colors.surfaceAlt }]}>
+        <AppIcon name="search-outline" size={16} color={colors.textTertiary} style={{ marginLeft: 10 }} />
         <TextInput
           placeholder="Search exercises..."
           placeholderTextColor={colors.textTertiary}
           value={search}
           onChangeText={setSearch}
-          style={[styles.searchInput, { color: colors.text, backgroundColor: colors.surfaceAlt }]}
+          style={[styles.searchInput, { color: colors.text, flex: 1 }]}
         />
       </View>
 
@@ -139,7 +139,7 @@ export default function ExercisesListScreen() {
         data={filtered}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
-        ListEmptyComponent={<EmptyState message="No exercises found." />}
+        ListEmptyComponent={<EmptyState iconName="barbell-outline" message="No exercises found." />}
         renderItem={({ item }) => (
           <Pressable
             onPress={() => router.push(`/(tabs)/train/exercises/${item.id}`)}
@@ -155,7 +155,7 @@ export default function ExercisesListScreen() {
                 {item.setup ? ` · ${item.setup}` : ''}
               </Text>
             </View>
-            <SymbolView name="chevron.right" tintColor={colors.textTertiary} size={14} />
+            <AppIcon name="chevron-forward" color={colors.textTertiary} size={14} />
           </Pressable>
         )}
       />

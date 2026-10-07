@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  View,
   Pressable,
   PressableProps,
   StyleSheet,
@@ -20,6 +21,8 @@ export interface ButtonProps extends Omit<PressableProps, 'style'> {
   loading?: boolean;
   pill?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
 }
 
 export function Button({
@@ -29,6 +32,8 @@ export function Button({
   loading = false,
   pill = true,
   size = 'md',
+  icon,
+  iconPosition = 'left',
   disabled,
   onPress,
   accessibilityLabel,
@@ -89,13 +94,21 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={textColor} size="small" />
       ) : (
-        <Text
-          variant={size === 'sm' ? 'caption' : 'bodyStrong'}
-          color={textColor}
-          style={styles.text}
-        >
-          {title}
-        </Text>
+        <View style={styles.contentRow}>
+          {icon && iconPosition === 'left' ? (
+            <View style={styles.iconLeft}>{icon}</View>
+          ) : null}
+          <Text
+            variant={size === 'sm' ? 'caption' : 'bodyStrong'}
+            color={textColor}
+            style={styles.text}
+          >
+            {title}
+          </Text>
+          {icon && iconPosition === 'right' ? (
+            <View style={styles.iconRight}>{icon}</View>
+          ) : null}
+        </View>
       )}
     </Pressable>
   );
@@ -105,7 +118,17 @@ const styles = StyleSheet.create({
   base: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  contentRow: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconLeft: {
+    marginRight: 6,
+  },
+  iconRight: {
+    marginLeft: 6,
   },
   text: {
     textAlign: 'center',

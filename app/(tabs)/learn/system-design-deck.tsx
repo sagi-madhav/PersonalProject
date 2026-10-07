@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
-import { Screen, Text, Segmented, Chip } from '../../../src/components';
+import { Screen, Text, Segmented, Chip, AppIcon } from '../../../src/components';
 import { useTheme } from '../../../src/theme';
 import { getBuildingBlocks, getCaseStudies } from '../../../content';
 
@@ -24,7 +23,7 @@ export default function SystemDesignDeckScreen() {
             style={styles.backBtn}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+            <AppIcon name="chevron-back" color={colors.text} size={20} />
           </Pressable>
           <Text variant="title">System Design</Text>
         </View>
@@ -102,7 +101,7 @@ export default function SystemDesignDeckScreen() {
                 <Text variant="bodyStrong" style={{ flex: 1 }}>
                   {item.title}
                 </Text>
-                <SymbolView name="chevron.right" tintColor={colors.accent} size={16} />
+                <AppIcon name="chevron-forward" color={colors.accent} size={16} />
               </View>
               <Text variant="caption" color={colors.textSecondary} style={{ marginTop: 4 }}>
                 {item.description}

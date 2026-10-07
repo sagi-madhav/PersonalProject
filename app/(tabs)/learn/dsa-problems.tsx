@@ -10,10 +10,9 @@ import {
   Alert,
 } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import * as Crypto from 'expo-crypto';
 import * as Linking from 'expo-linking';
-import { Screen, Text, Button, Chip, EmptyState } from '../../../src/components';
+import { Screen, Text, Button, Chip, EmptyState, AppIcon } from '../../../src/components';
 import { useTheme } from '../../../src/theme';
 import { dsaRepo } from '../../../src/db/repos/dsaRepo';
 import { learnRepo } from '../../../src/db/repos/learnRepo';
@@ -194,7 +193,7 @@ export default function DsaProblemsScreen() {
             style={styles.backBtn}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+            <AppIcon name="chevron-back" color={colors.text} size={20} />
           </Pressable>
           <Text variant="title">DSA Tracker</Text>
         </View>
@@ -203,18 +202,19 @@ export default function DsaProblemsScreen() {
           style={styles.addBtn}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <SymbolView name="plus" tintColor={colors.accent} size={20} />
+          <AppIcon name="add" color={colors.accent} size={22} />
         </Pressable>
       </View>
 
       {/* Search Input */}
-      <View style={styles.searchRow}>
+      <View style={[styles.searchRow, { backgroundColor: colors.surfaceAlt, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 }]}>
+        <AppIcon name="search-outline" size={16} color={colors.textTertiary} />
         <TextInput
           placeholder="Search problems..."
           placeholderTextColor={colors.textTertiary}
           value={search}
           onChangeText={setSearch}
-          style={[styles.searchInput, { color: colors.text, backgroundColor: colors.surfaceAlt }]}
+          style={[styles.searchInput, { color: colors.text, flex: 1, marginLeft: 6 }]}
         />
       </View>
 
@@ -278,7 +278,7 @@ export default function DsaProblemsScreen() {
           <View style={styles.modalHeader}>
             <Text variant="title">Add DSA Problem</Text>
             <Pressable onPress={() => setIsAddVisible(false)}>
-              <SymbolView name="xmark" tintColor={colors.text} size={20} />
+              <AppIcon name="close" color={colors.text} size={20} />
             </Pressable>
           </View>
 
@@ -337,6 +337,7 @@ export default function DsaProblemsScreen() {
             <Button
               title="Add Problem"
               variant="primary"
+              icon={<AppIcon name="add" size={16} color={colors.inkText} />}
               onPress={handleCreateProblem}
               style={{ marginTop: 24 }}
             />
@@ -353,7 +354,7 @@ export default function DsaProblemsScreen() {
                 {selectedProblem.title}
               </Text>
               <Pressable onPress={() => setSelectedProblem(null)}>
-                <SymbolView name="xmark" tintColor={colors.text} size={20} />
+                <AppIcon name="close" color={colors.text} size={20} />
               </Pressable>
             </View>
 
@@ -379,7 +380,7 @@ export default function DsaProblemsScreen() {
                     onPress={() => Linking.openURL(selectedProblem.url!)}
                     hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                   >
-                    <SymbolView name="arrow.up.right" tintColor={colors.accent} size={16} />
+                    <AppIcon name="open-outline" color={colors.accent} size={16} />
                   </Pressable>
                 )}
               </View>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
-import { Screen, Text, Button, EmptyState } from '../../../src/components';
+import { Screen, Text, Button, EmptyState, AppIcon } from '../../../src/components';
 import { useTheme } from '../../../src/theme';
 import { learnRepo } from '../../../src/db/repos/learnRepo';
 import { LearnProgressRecord } from '../../../src/db/types';
@@ -105,7 +104,7 @@ export default function SpacedReviewScreen() {
       <Screen edges={['top']} padHorizontal>
         <View style={styles.header}>
           <Pressable onPress={() => router.back()} style={styles.backBtn}>
-            <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+            <AppIcon name="chevron-back" color={colors.text} size={20} />
           </Pressable>
           <Text variant="title">Spaced Review</Text>
         </View>
@@ -124,13 +123,14 @@ export default function SpacedReviewScreen() {
       <Screen edges={['top']} padHorizontal>
         <View style={styles.header}>
           <Pressable onPress={() => router.back()} style={styles.backBtn}>
-            <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+            <AppIcon name="chevron-back" color={colors.text} size={20} />
           </Pressable>
           <Text variant="title">Spaced Review</Text>
         </View>
 
         <View style={styles.centerContainer}>
           <EmptyState
+            iconName="school-outline"
             message={
               completedCount > 0
                 ? `Well done! You reviewed ${completedCount} ${
@@ -142,6 +142,7 @@ export default function SpacedReviewScreen() {
           <Button
             title="Return to Learn"
             variant="primary"
+            icon={<AppIcon name="arrow-back" size={16} color={colors.inkText} />}
             onPress={() => router.back()}
             style={{ marginTop: 24, minWidth: 200 }}
           />
@@ -162,7 +163,7 @@ export default function SpacedReviewScreen() {
           style={styles.backBtn}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+          <AppIcon name="chevron-back" color={colors.text} size={20} />
         </Pressable>
         <Text variant="caption" color={colors.textSecondary}>
           Card {currentIndex + 1} of {queue.length}
@@ -208,9 +209,9 @@ export default function SpacedReviewScreen() {
                 },
               ]}
             >
-              <SymbolView
-                name="eye"
-                tintColor={colors.accent}
+              <AppIcon
+                name="eye-outline"
+                color={colors.accent}
                 size={22}
                 style={{ marginBottom: 6 }}
               />
@@ -254,6 +255,7 @@ export default function SpacedReviewScreen() {
             <Button
               title="Forgot (1d)"
               variant="danger"
+              icon={<AppIcon name="close" size={16} color="#FFF" />}
               onPress={() => handleAnswer('forgot')}
             />
           </View>
@@ -261,6 +263,7 @@ export default function SpacedReviewScreen() {
             <Button
               title={`Got it (+${nextInterval}d)`}
               variant="primary"
+              icon={<AppIcon name="checkmark" size={16} color={colors.inkText} />}
               onPress={() => handleAnswer('got_it')}
             />
           </View>

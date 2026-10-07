@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SymbolView } from 'expo-symbols';
-import { Text, ProgressBar } from '../../components';
+import { Text, ProgressBar, AppIcon } from '../../components';
 import { useTheme } from '../../theme';
 import { lightHaptic } from '../../lib/haptics';
 
@@ -75,7 +74,7 @@ export function RestBar({
             accessibilityLabel="Skip rest timer"
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="xmark" tintColor={colors.textSecondary} size={16} />
+            <AppIcon name="close" color={colors.textSecondary} size={16} />
           </Pressable>
         </View>
       </View>

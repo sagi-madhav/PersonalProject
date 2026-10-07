@@ -1,9 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import { format } from 'date-fns';
-import { Screen, Text } from '../../src/components';
+import { Screen, Text, AppIcon } from '../../src/components';
 import { useTheme } from '../../src/theme';
 import { useSettingsStore } from '../../src/lib/settingsStore';
 import { blocksRepo } from '../../src/db/repos/blocksRepo';
@@ -109,7 +108,7 @@ export default function TodayScreen() {
             style={styles.iconButton}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="tray" tintColor={colors.text} size={20} />
+            <AppIcon name="file-tray-full-outline" color={colors.text} size={20} />
             {inboxCount > 0 ? (
               <View style={[styles.badge, { backgroundColor: colors.accent }]}>
                 <Text variant="micro" color="#FFF" style={styles.badgeText}>
@@ -121,11 +120,16 @@ export default function TodayScreen() {
 
           <Pressable
             accessibilityLabel="Add Block"
-            onPress={() => router.push(`/block/new?date=${currentDateKey}`)}
+            onPress={() =>
+              router.push({
+                pathname: '/block/[id]',
+                params: { id: 'new', date: currentDateKey },
+              })
+            }
             style={styles.iconButton}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="plus" tintColor={colors.text} size={20} />
+            <AppIcon name="add" color={colors.text} size={22} />
           </Pressable>
 
           <Pressable
@@ -134,7 +138,7 @@ export default function TodayScreen() {
             style={styles.iconButton}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="gearshape" tintColor={colors.text} size={20} />
+            <AppIcon name="settings-outline" color={colors.text} size={20} />
           </Pressable>
         </View>
       </View>
@@ -147,7 +151,7 @@ export default function TodayScreen() {
           accessibilityLabel="Previous day"
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <SymbolView name="chevron.left" tintColor={colors.textSecondary} size={16} />
+          <AppIcon name="chevron-back" color={colors.textSecondary} size={18} />
         </Pressable>
 
         <Text variant="caption" color={colors.textSecondary}>
@@ -160,7 +164,7 @@ export default function TodayScreen() {
           accessibilityLabel="Next day"
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <SymbolView name="chevron.right" tintColor={colors.textSecondary} size={16} />
+          <AppIcon name="chevron-forward" color={colors.textSecondary} size={18} />
         </Pressable>
       </View>
 
@@ -182,7 +186,10 @@ export default function TodayScreen() {
         onPressBlock={(block) => router.push(`/block/${block.id}`)}
         onToggleDone={handleToggleDone}
         onPressEmptySlot={(startMin) =>
-          router.push(`/block/new?date=${currentDateKey}&startMin=${startMin}`)
+          router.push({
+            pathname: '/block/[id]',
+            params: { id: 'new', date: currentDateKey, startMin: startMin.toString() },
+          })
         }
       />
     </Screen>

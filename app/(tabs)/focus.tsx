@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { Screen, Text, Button, Segmented, ProgressBar, Chip } from '../../src/components';
+import { Screen, Text, Button, Segmented, ProgressBar, Chip, AppIcon } from '../../src/components';
 import { useTheme } from '../../src/theme';
 import { useTimer } from '../../src/lib/useTimer';
 import { TimerMode } from '../../src/lib/timerEngine';
@@ -98,7 +98,13 @@ export default function FocusScreen() {
         <View style={styles.chipRow}>
           <Chip
             label={state.label || 'Add Label'}
-            dotColor={colors.accent}
+            icon={
+              <AppIcon
+                name={state.label ? 'pricetag' : 'pricetag-outline'}
+                size={14}
+                color={state.label ? colors.inkText : colors.accent}
+              />
+            }
             selected={!!state.label}
             onPress={() => setLabelPickerVisible(true)}
           />
@@ -111,6 +117,7 @@ export default function FocusScreen() {
               title="Start"
               variant="primary"
               size="lg"
+              icon={<AppIcon name="play" size={18} color={colors.inkText} />}
               onPress={start}
               style={styles.mainButton}
             />
@@ -120,6 +127,7 @@ export default function FocusScreen() {
                 title="Pause"
                 variant="primary"
                 size="lg"
+                icon={<AppIcon name="pause" size={18} color={colors.inkText} />}
                 onPress={pause}
                 style={styles.halfButton}
               />
@@ -127,6 +135,7 @@ export default function FocusScreen() {
                 title="Stop"
                 variant="secondary"
                 size="lg"
+                icon={<AppIcon name="square" size={16} color={colors.text} />}
                 onPress={stop}
                 style={styles.halfButton}
               />
@@ -137,6 +146,7 @@ export default function FocusScreen() {
                 title="Resume"
                 variant="primary"
                 size="lg"
+                icon={<AppIcon name="play" size={18} color={colors.inkText} />}
                 onPress={resume}
                 style={styles.halfButton}
               />
@@ -144,6 +154,7 @@ export default function FocusScreen() {
                 title="Stop"
                 variant="secondary"
                 size="lg"
+                icon={<AppIcon name="square" size={16} color={colors.text} />}
                 onPress={stop}
                 style={styles.halfButton}
               />
@@ -154,6 +165,7 @@ export default function FocusScreen() {
               title="Next Round"
               variant="primary"
               size="lg"
+              icon={<AppIcon name="play-skip-forward" size={18} color={colors.inkText} />}
               onPress={advance}
               style={styles.mainButton}
             />

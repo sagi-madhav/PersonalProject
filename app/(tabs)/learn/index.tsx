@@ -6,8 +6,7 @@ import {
   Pressable,
 } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
-import { Screen, Text, Button, Segmented, ProgressBar } from '../../../src/components';
+import { Screen, Text, Button, Segmented, ProgressBar, AppIcon } from '../../../src/components';
 import { useTheme } from '../../../src/theme';
 import { getAllLessons, TrackId, Lesson } from '../../../content';
 import { learnRepo } from '../../../src/db/repos/learnRepo';
@@ -107,9 +106,9 @@ export default function LearnHomeScreen() {
           >
             <View style={styles.reviewDueHeader}>
               <View style={styles.reviewDueTitleRow}>
-                <SymbolView
-                  name="clock.arrow.circlepath"
-                  tintColor={colors.accent}
+                <AppIcon
+                  name="flame"
+                  color={colors.accent}
                   size={20}
                 />
                 <Text variant="bodyStrong" color={colors.accent}>
@@ -124,6 +123,7 @@ export default function LearnHomeScreen() {
               title="Start Review Session"
               variant="primary"
               size="sm"
+              icon={<AppIcon name="play" size={15} color={colors.inkText} />}
               onPress={() => router.push('/(tabs)/learn/review')}
             />
           </View>
@@ -199,9 +199,9 @@ export default function LearnHomeScreen() {
                               ● In progress
                             </Text>
                           ) : (
-                            <SymbolView
-                              name="chevron.right"
-                              tintColor={colors.textTertiary}
+                            <AppIcon
+                              name="chevron-forward"
+                              color={colors.textTertiary}
                               size={14}
                             />
                           )}
@@ -230,7 +230,7 @@ export default function LearnHomeScreen() {
               ]}
             >
               <View style={styles.extraIcon}>
-                <SymbolView name="doc.plaintext" tintColor={colors.accent} size={24} />
+                <AppIcon family="ion" name="logo-python" color={colors.accent} size={26} />
               </View>
               <View style={styles.extraInfo}>
                 <Text variant="bodyStrong">Python Cheat Sheet</Text>
@@ -238,7 +238,7 @@ export default function LearnHomeScreen() {
                   Syntax quick-reference: slicing, comprehensions, context managers, dataclasses
                 </Text>
               </View>
-              <SymbolView name="chevron.right" tintColor={colors.textTertiary} size={14} />
+              <AppIcon name="chevron-forward" color={colors.textTertiary} size={14} />
             </Pressable>
           )}
 
@@ -251,7 +251,7 @@ export default function LearnHomeScreen() {
               ]}
             >
               <View style={styles.extraIcon}>
-                <SymbolView name="list.bullet.rectangle" tintColor={colors.accent} size={24} />
+                <AppIcon family="ion" name="code-slash" color={colors.accent} size={24} />
               </View>
               <View style={styles.extraInfo}>
                 <Text variant="bodyStrong">DSA Problems Tracker</Text>
@@ -259,7 +259,7 @@ export default function LearnHomeScreen() {
                   Track LeetCode questions, patterns, difficulty, and review reminders
                 </Text>
               </View>
-              <SymbolView name="chevron.right" tintColor={colors.textTertiary} size={14} />
+              <AppIcon name="chevron-forward" color={colors.textTertiary} size={14} />
             </Pressable>
           )}
 
@@ -272,7 +272,7 @@ export default function LearnHomeScreen() {
               ]}
             >
               <View style={styles.extraIcon}>
-                <SymbolView name="square.stack.3d.up" tintColor={colors.accent} size={24} />
+                <AppIcon family="ion" name="layers-outline" color={colors.accent} size={24} />
               </View>
               <View style={styles.extraInfo}>
                 <Text variant="bodyStrong">Building Blocks & Case Studies</Text>
@@ -280,7 +280,7 @@ export default function LearnHomeScreen() {
                   12 architectural components & 8 end-to-end case study templates
                 </Text>
               </View>
-              <SymbolView name="chevron.right" tintColor={colors.textTertiary} size={14} />
+              <AppIcon name="chevron-forward" color={colors.textTertiary} size={14} />
             </Pressable>
           )}
         </View>

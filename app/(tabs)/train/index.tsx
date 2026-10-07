@@ -3,7 +3,7 @@ import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { startOfWeek, addDays, isSameDay, format } from 'date-fns';
-import { Screen, Text, Button, EmptyState } from '../../../src/components';
+import { Screen, Text, Button, EmptyState, AppIcon } from '../../../src/components';
 import { useTheme } from '../../../src/theme';
 import { useSettingsStore } from '../../../src/lib/settingsStore';
 import { workoutsRepo } from '../../../src/db/repos/workoutsRepo';
@@ -110,6 +110,13 @@ export default function TrainHomeScreen() {
           <Button
             title={hasDraft ? 'Resume Workout' : 'Start Workout'}
             variant="primary"
+            icon={
+              <AppIcon
+                name={hasDraft ? 'play' : 'barbell-outline'}
+                size={18}
+                color={colors.inkText}
+              />
+            }
             onPress={() => router.push('/workout/active')}
           />
           {hasDraft && (
@@ -125,6 +132,7 @@ export default function TrainHomeScreen() {
             <Button
               title="Exercises"
               variant="secondary"
+              icon={<AppIcon name="barbell-outline" size={16} color={colors.text} />}
               onPress={() => router.push('/(tabs)/train/exercises')}
             />
           </View>
@@ -132,6 +140,7 @@ export default function TrainHomeScreen() {
             <Button
               title="History"
               variant="secondary"
+              icon={<AppIcon name="time-outline" size={16} color={colors.text} />}
               onPress={() => router.push('/(tabs)/train/history')}
             />
           </View>
@@ -198,16 +207,19 @@ export default function TrainHomeScreen() {
               <Pressable
                 onPress={() => router.push('/(tabs)/train/history')}
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}
               >
                 <Text variant="caption" color={colors.accent}>
                   View all
                 </Text>
+                <AppIcon name="chevron-forward" size={13} color={colors.accent} />
               </Pressable>
             )}
           </View>
 
           {recentWorkouts.length === 0 ? (
             <EmptyState
+              iconName="barbell-outline"
               message="No workouts logged yet. Tap Start Workout to begin!"
               style={{ paddingVertical: 24 }}
             />

@@ -9,10 +9,9 @@ import {
   Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system/legacy';
-import { Screen, Text, Row, Segmented, Stepper } from '../src/components';
+import { Screen, Text, Row, Segmented, Stepper, AppIcon } from '../src/components';
 import { useTheme } from '../src/theme';
 import { useSettingsStore } from '../src/lib/settingsStore';
 import { createBackupPayload, wipeAllData } from '../src/lib/backup';
@@ -101,7 +100,7 @@ export default function SettingsScreen() {
           style={styles.backButton}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+          <AppIcon name="chevron-back" color={colors.text} size={20} />
         </Pressable>
         <Text variant="heading" style={{ marginLeft: 12 }}>
           Settings
@@ -111,9 +110,12 @@ export default function SettingsScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Appearance */}
         <View style={styles.section}>
-          <Text variant="caption" color={colors.textSecondary} style={styles.sectionTitle}>
-            APPEARANCE
-          </Text>
+          <View style={styles.sectionHeaderRow}>
+            <AppIcon name="color-palette-outline" size={14} color={colors.textSecondary} />
+            <Text variant="caption" color={colors.textSecondary} style={styles.sectionTitle}>
+              APPEARANCE
+            </Text>
+          </View>
           <View style={[styles.card, { backgroundColor: colors.surface }]}>
             <View style={styles.settingRow}>
               <Text variant="bodyStrong">Theme</Text>
@@ -156,9 +158,12 @@ export default function SettingsScreen() {
 
         {/* Focus */}
         <View style={styles.section}>
-          <Text variant="caption" color={colors.textSecondary} style={styles.sectionTitle}>
-            FOCUS & TIMER
-          </Text>
+          <View style={styles.sectionHeaderRow}>
+            <AppIcon name="timer-outline" size={14} color={colors.textSecondary} />
+            <Text variant="caption" color={colors.textSecondary} style={styles.sectionTitle}>
+              FOCUS & TIMER
+            </Text>
+          </View>
           <View style={[styles.card, { backgroundColor: colors.surface }]}>
             <View style={styles.settingRow}>
               <Text variant="bodyStrong">Focus Duration</Text>
@@ -222,9 +227,12 @@ export default function SettingsScreen() {
 
         {/* Train */}
         <View style={styles.section}>
-          <Text variant="caption" color={colors.textSecondary} style={styles.sectionTitle}>
-            WORKOUT & TRAINING
-          </Text>
+          <View style={styles.sectionHeaderRow}>
+            <AppIcon name="barbell-outline" size={14} color={colors.textSecondary} />
+            <Text variant="caption" color={colors.textSecondary} style={styles.sectionTitle}>
+              WORKOUT & TRAINING
+            </Text>
+          </View>
           <View style={[styles.card, { backgroundColor: colors.surface }]}>
             <View style={styles.settingRow}>
               <Text variant="bodyStrong">Weight Unit</Text>
@@ -265,31 +273,37 @@ export default function SettingsScreen() {
 
         {/* Data & Backup */}
         <View style={styles.section}>
-          <Text variant="caption" color={colors.textSecondary} style={styles.sectionTitle}>
-            DATA & BACKUP
-          </Text>
+          <View style={styles.sectionHeaderRow}>
+            <AppIcon name="cloud-upload-outline" size={14} color={colors.textSecondary} />
+            <Text variant="caption" color={colors.textSecondary} style={styles.sectionTitle}>
+              DATA & BACKUP
+            </Text>
+          </View>
           <View style={[styles.card, { backgroundColor: colors.surface }]}>
             <Row
               title="Export Backup (JSON)"
               subtitle={isExporting ? 'Exporting...' : 'Export all tasks, workouts, and notes'}
               onPress={handleExportBackup}
-              rightAccessory={<SymbolView name="square.and.arrow.up" tintColor={colors.accent} size={18} />}
+              rightAccessory={<AppIcon name="share-outline" color={colors.accent} size={18} />}
             />
             <View style={styles.divider} />
             <Row
               title="Delete All Data"
               subtitle="Clear SQLite database and reset"
               onPress={handleWipeData}
-              rightAccessory={<SymbolView name="trash" tintColor={colors.danger} size={18} />}
+              rightAccessory={<AppIcon name="trash-outline" color={colors.danger} size={18} />}
             />
           </View>
         </View>
 
         {/* About */}
         <View style={styles.section}>
-          <Text variant="caption" color={colors.textSecondary} style={styles.sectionTitle}>
-            ABOUT
-          </Text>
+          <View style={styles.sectionHeaderRow}>
+            <AppIcon name="information-circle-outline" size={14} color={colors.textSecondary} />
+            <Text variant="caption" color={colors.textSecondary} style={styles.sectionTitle}>
+              ABOUT
+            </Text>
+          </View>
           <View style={[styles.card, { backgroundColor: colors.surface }]}>
             <Row
               title="Minimalist Planner"
@@ -321,9 +335,16 @@ const styles = StyleSheet.create({
     marginTop: 24,
     paddingHorizontal: 20,
   },
-  sectionTitle: {
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
     marginBottom: 8,
     marginLeft: 4,
+  },
+  sectionTitle: {
+    marginBottom: 0,
+    marginLeft: 0,
   },
   card: {
     borderRadius: 12,

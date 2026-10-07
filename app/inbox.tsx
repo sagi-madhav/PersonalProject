@@ -8,9 +8,8 @@ import {
   Alert,
 } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import * as Crypto from 'expo-crypto';
-import { Screen, Text, EmptyState } from '../src/components';
+import { Screen, Text, EmptyState, AppIcon } from '../src/components';
 import { useTheme } from '../src/theme';
 import { blocksRepo } from '../src/db/repos/blocksRepo';
 import { BlockRecord } from '../src/db/types';
@@ -114,7 +113,7 @@ export default function InboxScreen() {
           style={styles.closeBtn}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <SymbolView name="xmark" tintColor={colors.textSecondary} size={20} />
+          <AppIcon name="close" color={colors.textSecondary} size={20} />
         </Pressable>
       </View>
 
@@ -139,6 +138,7 @@ export default function InboxScreen() {
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={
           <EmptyState
+            iconName="file-tray-outline"
             message="Inbox is clear. Capture thoughts quickly above."
           />
         }
@@ -185,7 +185,7 @@ export default function InboxScreen() {
                   accessibilityLabel="Schedule for Today"
                   hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 >
-                  <SymbolView name="calendar.badge.plus" tintColor={colors.accent} size={18} />
+                  <AppIcon name="calendar-outline" color={colors.accent} size={18} />
                 </Pressable>
 
                 <Pressable
@@ -194,7 +194,7 @@ export default function InboxScreen() {
                   accessibilityLabel="Delete item"
                   hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 >
-                  <SymbolView name="trash" tintColor={colors.textTertiary} size={16} />
+                  <AppIcon name="trash-outline" color={colors.textTertiary} size={16} />
                 </Pressable>
               </View>
             </View>

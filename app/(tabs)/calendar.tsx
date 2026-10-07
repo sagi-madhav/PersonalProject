@@ -6,9 +6,8 @@ import {
   ScrollView,
 } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import { format, addMonths, subMonths } from 'date-fns';
-import { Screen, Text, Button } from '../../src/components';
+import { Screen, Text, Button, AppIcon, EmptyState } from '../../src/components';
 import { useTheme } from '../../src/theme';
 import { useSettingsStore } from '../../src/lib/settingsStore';
 import { blocksRepo } from '../../src/db/repos/blocksRepo';
@@ -117,7 +116,7 @@ export default function CalendarScreen() {
             accessibilityLabel="Previous month"
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="chevron.left" tintColor={colors.text} size={18} />
+            <AppIcon name="chevron-back" color={colors.text} size={18} />
           </Pressable>
           <Pressable
             onPress={handleNextMonth}
@@ -125,7 +124,7 @@ export default function CalendarScreen() {
             accessibilityLabel="Next month"
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="chevron.right" tintColor={colors.text} size={18} />
+            <AppIcon name="chevron-forward" color={colors.text} size={18} />
           </Pressable>
         </View>
       </View>
@@ -194,7 +193,6 @@ export default function CalendarScreen() {
 
       <View style={[styles.divider, { backgroundColor: colors.hairline }]} />
 
-      {/* Agenda for Selected Day */}
       <View style={styles.agendaHeader}>
         <Text variant="bodyStrong">
           {format(new Date(selectedDateKey + 'T12:00:00'), 'EEEE, MMMM d')}
@@ -203,15 +201,25 @@ export default function CalendarScreen() {
           title="Open Day"
           variant="quiet"
           size="sm"
+          icon={<AppIcon name="open-outline" size={14} color={colors.text} />}
+          iconPosition="right"
           onPress={() => router.push(`/(tabs)?date=${selectedDateKey}`)}
         />
       </View>
 
       <ScrollView contentContainerStyle={styles.agendaList}>
         {selectedDayBlocks.length === 0 ? (
-          <Text variant="body" color={colors.textTertiary} style={styles.emptyText}>
-            No plans scheduled for this day.
-          </Text>
+          <EmptyState
+            iconName="calendar-outline"
+            message="No plans scheduled for this day."
+            actionTitle="Plan Block"
+            onAction={() =>
+              router.push({
+                pathname: '/block/[id]',
+                params: { id: 'new', date: selectedDateKey },
+              })
+            }
+          />
         ) : (
           selectedDayBlocks.map((b) => {
             const timeStr =

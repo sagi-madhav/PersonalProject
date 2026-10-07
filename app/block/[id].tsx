@@ -10,9 +10,8 @@ import {
   Alert,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import * as Crypto from 'expo-crypto';
-import { Screen, Text, Button, Chip, Stepper } from '../../src/components';
+import { Screen, Text, Button, Chip, Stepper, AppIcon } from '../../src/components';
 import { useTheme, BlockCategory } from '../../src/theme';
 import { blocksRepo } from '../../src/db/repos/blocksRepo';
 import { BlockRecord, BlockKind } from '../../src/db/types';
@@ -189,7 +188,7 @@ export default function BlockEditorScreen() {
             style={styles.closeBtn}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="xmark" tintColor={colors.textSecondary} size={20} />
+            <AppIcon name="close" color={colors.textSecondary} size={20} />
           </Pressable>
         </View>
 
@@ -319,11 +318,18 @@ export default function BlockEditorScreen() {
 
           {/* Action Buttons */}
           <View style={styles.actionButtons}>
-            <Button title="Save" variant="primary" onPress={handleSave} style={{ marginBottom: 12 }} />
+            <Button
+              title="Save"
+              variant="primary"
+              icon={<AppIcon name="checkmark" size={16} color={colors.inkText} />}
+              onPress={handleSave}
+              style={{ marginBottom: 12 }}
+            />
             {!isNew ? (
               <Button
                 title="Start Focus Session"
                 variant="secondary"
+                icon={<AppIcon name="timer-outline" size={16} color={colors.text} />}
                 onPress={() => {
                   router.push({
                     pathname: '/(tabs)/focus',
@@ -337,6 +343,7 @@ export default function BlockEditorScreen() {
               <Button
                 title="Open Linked Lesson"
                 variant="secondary"
+                icon={<AppIcon name="book-outline" size={16} color={colors.text} />}
                 onPress={() => {
                   const lesson = getLessonById(existingBlock.link_id!);
                   const track = lesson ? lesson.track : 'python';
@@ -349,6 +356,7 @@ export default function BlockEditorScreen() {
               <Button
                 title="View Workout History"
                 variant="secondary"
+                icon={<AppIcon name="barbell-outline" size={16} color={colors.text} />}
                 onPress={() => {
                   router.push('/(tabs)/train/history');
                 }}
@@ -356,7 +364,12 @@ export default function BlockEditorScreen() {
               />
             ) : null}
             {!isNew ? (
-              <Button title="Delete Block" variant="quiet" onPress={handleDelete} />
+              <Button
+                title="Delete Block"
+                variant="quiet"
+                icon={<AppIcon name="trash-outline" size={16} color={colors.danger} />}
+                onPress={handleDelete}
+              />
             ) : null}
           </View>
         </ScrollView>

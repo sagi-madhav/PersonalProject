@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import { useTheme } from '../../src/theme';
 import { learnRepo } from '../../src/db/repos/learnRepo';
+
+import { AppIcon } from '../../src/components';
 
 export default function TabLayout() {
   const { colors } = useTheme();
@@ -45,8 +46,12 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Today',
-          tabBarIcon: ({ color }) => (
-            <SymbolView name="calendar.day.timeline.left" tintColor={color} size={22} />
+          tabBarIcon: ({ color, focused }) => (
+            <AppIcon
+              name={focused ? 'today' : 'today-outline'}
+              color={color}
+              size={22}
+            />
           ),
         }}
       />
@@ -54,8 +59,12 @@ export default function TabLayout() {
         name="calendar"
         options={{
           title: 'Calendar',
-          tabBarIcon: ({ color }) => (
-            <SymbolView name="calendar" tintColor={color} size={22} />
+          tabBarIcon: ({ color, focused }) => (
+            <AppIcon
+              name={focused ? 'calendar' : 'calendar-outline'}
+              color={color}
+              size={22}
+            />
           ),
         }}
       />
@@ -63,8 +72,12 @@ export default function TabLayout() {
         name="focus"
         options={{
           title: 'Focus',
-          tabBarIcon: ({ color }) => (
-            <SymbolView name="timer" tintColor={color} size={22} />
+          tabBarIcon: ({ color, focused }) => (
+            <AppIcon
+              name={focused ? 'timer' : 'timer-outline'}
+              color={color}
+              size={22}
+            />
           ),
         }}
       />
@@ -78,8 +91,12 @@ export default function TabLayout() {
             color: colors.accent,
             backgroundColor: 'transparent',
           },
-          tabBarIcon: ({ color }) => (
-            <SymbolView name="book" tintColor={color} size={22} />
+          tabBarIcon: ({ color, focused }) => (
+            <AppIcon
+              name={focused ? 'school' : 'school-outline'}
+              color={color}
+              size={22}
+            />
           ),
         }}
       />
@@ -87,8 +104,12 @@ export default function TabLayout() {
         name="train"
         options={{
           title: 'Train',
-          tabBarIcon: ({ color }) => (
-            <SymbolView name="dumbbell" tintColor={color} size={22} />
+          tabBarIcon: ({ color, focused }) => (
+            <AppIcon
+              name={focused ? 'barbell' : 'barbell-outline'}
+              color={color}
+              size={22}
+            />
           ),
         }}
       />

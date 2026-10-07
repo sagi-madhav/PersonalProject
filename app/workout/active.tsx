@@ -9,11 +9,10 @@ import {
   Modal,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import * as Crypto from 'expo-crypto';
-import { Screen, Text, Button } from '../../src/components';
+import { Screen, Text, Button, AppIcon } from '../../src/components';
 import { useTheme } from '../../src/theme';
 import { useSettingsStore } from '../../src/lib/settingsStore';
 import { workoutsRepo } from '../../src/db/repos/workoutsRepo';
@@ -327,7 +326,7 @@ export default function ActiveWorkoutScreen() {
           style={styles.headerBtn}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <SymbolView name="xmark" tintColor={colors.textSecondary} size={20} />
+          <AppIcon name="close" color={colors.textSecondary} size={20} />
         </Pressable>
 
         <View style={styles.headerCenter}>
@@ -337,7 +336,12 @@ export default function ActiveWorkoutScreen() {
           </Text>
         </View>
 
-        <Button title="Finish" size="sm" onPress={handleFinish} />
+        <Button
+          title="Finish"
+          size="sm"
+          icon={<AppIcon name="checkmark" size={15} color={colors.inkText} />}
+          onPress={handleFinish}
+        />
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -397,7 +401,8 @@ export default function ActiveWorkoutScreen() {
                       {s.setNumber}
                     </Text>
                     {s.isPR ? (
-                      <View style={[styles.prBadge, { backgroundColor: colors.accent }]}>
+                      <View style={[styles.prBadge, { backgroundColor: colors.accent, flexDirection: 'row', alignItems: 'center' }]}>
+                        <AppIcon name="flame" size={9} color="#FFF" style={{ marginRight: 2 }} />
                         <Text variant="micro" color="#FFF" style={styles.prText}>
                           PR
                         </Text>
@@ -480,7 +485,7 @@ export default function ActiveWorkoutScreen() {
                       ]}
                     >
                       {s.completed ? (
-                        <SymbolView name="checkmark" tintColor="#FFF" size={12} />
+                        <AppIcon name="checkmark" color="#FFF" size={14} />
                       ) : null}
                     </View>
                   </Pressable>
@@ -489,9 +494,10 @@ export default function ActiveWorkoutScreen() {
             })}
 
             <Button
-              title="+ Add Set"
+              title="Add Set"
               variant="quiet"
               size="sm"
+              icon={<AppIcon name="add" size={15} color={colors.accent} />}
               onPress={() => handleAddSet(exIdx)}
               style={styles.addSetBtn}
             />
@@ -499,8 +505,9 @@ export default function ActiveWorkoutScreen() {
         ))}
 
         <Button
-          title="+ Add Exercise"
+          title="Add Exercise"
           variant="secondary"
+          icon={<AppIcon name="add-circle-outline" size={18} color={colors.text} />}
           onPress={() => setPickerVisible(true)}
           style={styles.addExerciseBtn}
         />
@@ -522,7 +529,7 @@ export default function ActiveWorkoutScreen() {
           <View style={styles.pickerHeader}>
             <Text variant="title">Add Exercise</Text>
             <Pressable onPress={() => setPickerVisible(false)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-              <SymbolView name="xmark" tintColor={colors.textSecondary} size={20} />
+              <AppIcon name="close" color={colors.textSecondary} size={20} />
             </Pressable>
           </View>
 

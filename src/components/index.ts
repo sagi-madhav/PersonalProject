@@ -10,3 +10,4 @@ export * from './Stepper';
 export * from './Toast';
 export * from './ProgressBar';
 export * from './Sparkline';
+export * from './AppIcon';

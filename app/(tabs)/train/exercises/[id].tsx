@@ -8,12 +8,11 @@ import {
   Alert,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Crypto from 'expo-crypto';
 import { Image } from 'expo-image';
-import { Screen, Text, Button, Stepper } from '../../../../src/components';
+import { Screen, Text, Button, Stepper, AppIcon } from '../../../../src/components';
 import { useTheme } from '../../../../src/theme';
 import { exercisesRepo } from '../../../../src/db/repos/exercisesRepo';
 import { ExerciseRecord, ExercisePhotoRecord } from '../../../../src/db/types';
@@ -179,7 +178,7 @@ export default function ExerciseDetailScreen() {
           style={styles.backBtn}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+          <AppIcon name="chevron-back" color={colors.text} size={20} />
         </Pressable>
         <Text variant="heading" numberOfLines={1} style={styles.title}>
           {exercise.name}
@@ -187,6 +186,7 @@ export default function ExerciseDetailScreen() {
         <Button
           title={isSaving ? '...' : 'Save'}
           size="sm"
+          icon={<AppIcon name="checkmark" size={14} color={colors.inkText} />}
           onPress={handleSave}
         />
       </View>
@@ -217,7 +217,7 @@ export default function ExerciseDetailScreen() {
               style={[styles.addPhotoTile, { borderColor: colors.hairline, backgroundColor: colors.surfaceAlt }]}
               accessibilityLabel="Add machine photo"
             >
-              <SymbolView name="camera" tintColor={colors.accent} size={24} />
+              <AppIcon name="camera-outline" color={colors.accent} size={24} />
               <Text variant="micro" color={colors.accent} style={{ marginTop: 6 }}>
                 + Photo
               </Text>

@@ -1,9 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Pressable, FlatList, Alert } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import { format } from 'date-fns';
-import { Screen, Text, EmptyState } from '../../../src/components';
+import { Screen, Text, EmptyState, AppIcon } from '../../../src/components';
 import { useTheme } from '../../../src/theme';
 import { useSettingsStore } from '../../../src/lib/settingsStore';
 import { workoutsRepo } from '../../../src/db/repos/workoutsRepo';
@@ -67,7 +66,7 @@ export default function WorkoutHistoryScreen() {
             style={styles.backBtn}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+            <AppIcon name="chevron-back" color={colors.text} size={20} />
           </Pressable>
           <Text variant="title">Workout History</Text>
         </View>
@@ -77,7 +76,7 @@ export default function WorkoutHistoryScreen() {
         data={workouts}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
-        ListEmptyComponent={<EmptyState message="No logged workouts yet." />}
+        ListEmptyComponent={<EmptyState iconName="time-outline" message="No logged workouts yet." />}
         renderItem={({ item }) => {
           const wSets = setsByWorkout[item.id] || [];
           const totalVolumeKg = wSets.reduce((sum, s) => {
@@ -102,7 +101,7 @@ export default function WorkoutHistoryScreen() {
                   onPress={() => handleDelete(item)}
                   hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 >
-                  <SymbolView name="trash" tintColor={colors.textTertiary} size={16} />
+                  <AppIcon name="trash-outline" color={colors.textTertiary} size={16} />
                 </Pressable>
               </View>
 

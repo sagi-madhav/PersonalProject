@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import Markdown from 'react-native-markdown-display';
-import { Screen, Text } from '../../../src/components';
+import { Screen, Text, AppIcon } from '../../../src/components';
 import { useTheme } from '../../../src/theme';
 import { PYTHON_CHEAT_SHEET } from '../../../content';
 
@@ -62,7 +61,7 @@ export default function PythonCheatSheetScreen() {
           style={styles.backBtn}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+          <AppIcon name="chevron-back" color={colors.text} size={20} />
         </Pressable>
         <Text variant="title">Python Cheat Sheet</Text>
       </View>

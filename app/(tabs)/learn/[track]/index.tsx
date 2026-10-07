@@ -1,8 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, FlatList, Pressable } from 'react-native';
 import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
-import { Screen, Text, ProgressBar, EmptyState } from '../../../../src/components';
+import { Screen, Text, ProgressBar, EmptyState, AppIcon } from '../../../../src/components';
 import { useTheme } from '../../../../src/theme';
 import { getAllLessons, TrackId, Lesson } from '../../../../content';
 import { learnRepo } from '../../../../src/db/repos/learnRepo';
@@ -67,7 +66,7 @@ export default function TrackDetailScreen() {
             style={styles.backBtn}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+            <AppIcon name="chevron-back" color={colors.text} size={20} />
           </Pressable>
           <Text variant="title">{trackTitle}</Text>
         </View>
@@ -147,9 +146,9 @@ export default function TrackDetailScreen() {
                             ● Learning
                           </Text>
                         ) : (
-                          <SymbolView
-                            name="chevron.right"
-                            tintColor={colors.textTertiary}
+                          <AppIcon
+                            name="chevron-forward"
+                            color={colors.textTertiary}
                             size={14}
                           />
                         )}

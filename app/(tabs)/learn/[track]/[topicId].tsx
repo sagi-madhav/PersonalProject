@@ -7,9 +7,8 @@ import {
   TextInput,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
 import Markdown from 'react-native-markdown-display';
-import { Screen, Text, Button, Chip } from '../../../../src/components';
+import { Screen, Text, Button, Chip, AppIcon } from '../../../../src/components';
 import { useTheme } from '../../../../src/theme';
 import { getLessonById } from '../../../../content';
 import { learnRepo } from '../../../../src/db/repos/learnRepo';
@@ -127,7 +126,7 @@ export default function LessonScreen() {
       <Screen edges={['top']} padHorizontal>
         <View style={styles.header}>
           <Pressable onPress={() => router.back()} style={styles.backBtn}>
-            <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+            <AppIcon name="chevron-back" color={colors.text} size={20} />
           </Pressable>
           <Text variant="title">Lesson Not Found</Text>
         </View>
@@ -218,7 +217,7 @@ export default function LessonScreen() {
           style={styles.backBtn}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <SymbolView name="chevron.left" tintColor={colors.text} size={20} />
+          <AppIcon name="chevron-back" color={colors.text} size={20} />
         </Pressable>
         <Text variant="caption" color={colors.textSecondary}>
           {track?.toUpperCase()} · {lesson.module}
@@ -304,7 +303,14 @@ export default function LessonScreen() {
         {/* Action Buttons */}
         <View style={styles.actionsContainer}>
           <Button
-            title={status === 'done' ? '✓ Completed' : 'Mark Done (+1d Review)'}
+            title={status === 'done' ? 'Completed' : 'Mark Done (+1d Review)'}
+            icon={
+              <AppIcon
+                name={status === 'done' ? 'checkmark-circle' : 'checkmark'}
+                size={16}
+                color={colors.inkText}
+              />
+            }
             variant="primary"
             onPress={handleMarkDone}
             style={{ marginBottom: 10 }}
@@ -314,6 +320,7 @@ export default function LessonScreen() {
             <View style={{ flex: 1 }}>
               <Button
                 title="Start Focus"
+                icon={<AppIcon name="timer-outline" size={15} color={colors.text} />}
                 variant="secondary"
                 size="sm"
                 onPress={handleStartFocus}
@@ -322,6 +329,7 @@ export default function LessonScreen() {
             <View style={{ flex: 1 }}>
               <Button
                 title="Schedule Study"
+                icon={<AppIcon name="calendar-outline" size={15} color={colors.text} />}
                 variant="secondary"
                 size="sm"
                 onPress={handleScheduleStudy}

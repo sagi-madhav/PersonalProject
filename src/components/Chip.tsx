@@ -9,6 +9,7 @@ export interface ChipProps {
   selected?: boolean;
   onPress?: () => void;
   dotColor?: string;
+  icon?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -17,6 +18,7 @@ export function Chip({
   selected = false,
   onPress,
   dotColor,
+  icon,
   style,
 }: ChipProps) {
   const { colors } = useTheme();
@@ -41,7 +43,9 @@ export function Chip({
       ]}
       hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
     >
-      {dotColor ? (
+      {icon ? (
+        <View style={styles.iconContainer}>{icon}</View>
+      ) : dotColor ? (
         <View style={[styles.dot, { backgroundColor: dotColor }]} />
       ) : null}
       <Text
@@ -69,6 +73,9 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
+    marginRight: 6,
+  },
+  iconContainer: {
     marginRight: 6,
   },
   label: {
