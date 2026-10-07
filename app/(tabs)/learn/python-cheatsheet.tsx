@@ -1,5 +1,4 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, StyleSheet, ScrollView, Pressable, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import Markdown from 'react-native-markdown-display';
 import { Screen, Text, AppIcon } from '../../../src/components';
@@ -35,7 +34,7 @@ export default function PythonCheatSheetScreen() {
       borderWidth: 0.5,
       borderRadius: 8,
       padding: 12,
-      fontFamily: 'Menlo',
+      fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
       fontSize: 13,
       color: colors.text,
       marginVertical: 8,
@@ -46,7 +45,7 @@ export default function PythonCheatSheetScreen() {
       borderWidth: 0.5,
       borderRadius: 8,
       padding: 12,
-      fontFamily: 'Menlo',
+      fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
       fontSize: 13,
       color: colors.text,
       marginVertical: 8,

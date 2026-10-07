@@ -116,7 +116,10 @@ export default function TrackDetailScreen() {
                     <Pressable
                       key={l.id}
                       onPress={() =>
-                        router.push(`/(tabs)/learn/${track}/${l.id}` as any)
+                        router.push({
+                          pathname: '/(tabs)/learn/[track]/[topicId]',
+                          params: { track, topicId: l.id },
+                        })
                       }
                       style={[
                         styles.lessonRow,

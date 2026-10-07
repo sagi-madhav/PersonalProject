@@ -347,7 +347,10 @@ export default function BlockEditorScreen() {
                 onPress={() => {
                   const lesson = getLessonById(existingBlock.link_id!);
                   const track = lesson ? lesson.track : 'python';
-                  router.push(`/(tabs)/learn/${track}/${existingBlock.link_id}` as any);
+                  router.push({
+                    pathname: '/(tabs)/learn/[track]/[topicId]',
+                    params: { track, topicId: existingBlock.link_id! },
+                  });
                 }}
                 style={{ marginBottom: 12 }}
               />

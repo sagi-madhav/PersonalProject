@@ -168,9 +168,10 @@ export default function LearnHomeScreen() {
                       <Pressable
                         key={lesson.id}
                         onPress={() =>
-                          router.push(
-                            `/(tabs)/learn/${activeTrack}/${lesson.id}` as any
-                          )
+                          router.push({
+                            pathname: '/(tabs)/learn/[track]/[topicId]',
+                            params: { track: activeTrack, topicId: lesson.id },
+                          })
                         }
                         style={[
                           styles.lessonRow,

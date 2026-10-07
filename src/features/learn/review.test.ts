@@ -4,6 +4,7 @@ import {
   isReviewDue,
   REVIEW_INTERVAL_DAYS,
 } from './review';
+import { getAllLessons, getLessonById } from '../../../content';
 
 describe('Spaced Review Ladder', () => {
   const ONE_DAY_MS = 24 * 60 * 60 * 1000;
@@ -63,5 +64,23 @@ describe('Spaced Review Ladder', () => {
 
   test('ladder intervals match 1, 3, 7, 14, 30, 60 days', () => {
     expect(REVIEW_INTERVAL_DAYS).toEqual([1, 3, 7, 14, 30, 60]);
+  });
+});
+
+describe('Lesson Curriculum Integrity', () => {
+  test('all tracks have non-empty lessons and getLessonById resolves each lesson', () => {
+    const tracks = ['python', 'dsa', 'system-design'] as const;
+    for (const track of tracks) {
+      const lessons = getAllLessons(track);
+      expect(lessons.length).toBeGreaterThan(0);
+      for (const lesson of lessons) {
+        expect(lesson.id).toBeTruthy();
+        expect(lesson.title).toBeTruthy();
+        expect(lesson.body).toBeTruthy();
+        const found = getLessonById(lesson.id);
+        expect(found).toBeDefined();
+        expect(found?.id).toBe(lesson.id);
+      }
+    }
   });
 });

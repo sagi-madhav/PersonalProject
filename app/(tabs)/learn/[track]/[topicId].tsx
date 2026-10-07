@@ -5,6 +5,7 @@ import {
   ScrollView,
   Pressable,
   TextInput,
+  Platform,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import Markdown from 'react-native-markdown-display';
@@ -18,7 +19,9 @@ import { lightHaptic, notificationSuccess } from '../../../../src/lib/haptics';
 
 export default function LessonScreen() {
   const router = useRouter();
-  const { track, topicId } = useLocalSearchParams<{ track: string; topicId: string }>();
+  const rawParams = useLocalSearchParams<{ track?: string | string[]; topicId?: string | string[] }>();
+  const track = Array.isArray(rawParams.track) ? rawParams.track[0] : rawParams.track;
+  const topicId = Array.isArray(rawParams.topicId) ? rawParams.topicId[0] : rawParams.topicId;
   const { colors } = useTheme();
 
   const lesson = topicId ? getLessonById(topicId) : undefined;
@@ -49,27 +52,31 @@ export default function LessonScreen() {
   const saveProgress = useCallback(
     async (newStatus: LearnStatus, newNotes: string) => {
       if (!topicId) return;
-      const existing = progress;
-      const isNewlyDone = newStatus === 'done' && existing?.status !== 'done';
-      const reviewUpdate = isNewlyDone
-        ? scheduleInitialReview()
-        : {
-            nextStage: existing?.review_stage ?? 0,
-            nextReviewAt: existing?.next_review_at ?? null,
-          };
+      try {
+        const existing = progress;
+        const isNewlyDone = newStatus === 'done' && existing?.status !== 'done';
+        const reviewUpdate = isNewlyDone
+          ? scheduleInitialReview()
+          : {
+              nextStage: existing?.review_stage ?? 0,
+              nextReviewAt: existing?.next_review_at ?? null,
+            };
 
-      const updatedRecord: LearnProgressRecord = {
-        topic_id: topicId,
-        status: newStatus,
-        notes: newNotes.trim() || null,
-        review_stage: reviewUpdate.nextStage,
-        last_reviewed_at: existing?.last_reviewed_at ?? null,
-        next_review_at: reviewUpdate.nextReviewAt,
-        time_spent_ms: existing?.time_spent_ms ?? 0,
-      };
+        const updatedRecord: LearnProgressRecord = {
+          topic_id: topicId,
+          status: newStatus,
+          notes: newNotes.trim() || null,
+          review_stage: reviewUpdate.nextStage,
+          last_reviewed_at: existing?.last_reviewed_at ?? null,
+          next_review_at: reviewUpdate.nextReviewAt,
+          time_spent_ms: existing?.time_spent_ms ?? 0,
+        };
 
-      await learnRepo.upsert(updatedRecord);
-      setProgress(updatedRecord);
+        await learnRepo.upsert(updatedRecord);
+        setProgress(updatedRecord);
+      } catch (err) {
+        console.warn('Failed to persist lesson progress', err);
+      }
     },
     [topicId, progress]
   );
@@ -179,7 +186,7 @@ export default function LessonScreen() {
     code_inline: {
       backgroundColor: colors.surfaceAlt,
       color: colors.accent,
-      fontFamily: 'Menlo',
+      fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
       fontSize: 14,
       borderRadius: 4,
       paddingHorizontal: 4,
@@ -190,7 +197,7 @@ export default function LessonScreen() {
       borderWidth: 0.5,
       borderRadius: 8,
       padding: 12,
-      fontFamily: 'Menlo',
+      fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
       fontSize: 13,
       color: colors.text,
       marginVertical: 10,
@@ -201,7 +208,7 @@ export default function LessonScreen() {
       borderWidth: 0.5,
       borderRadius: 8,
       padding: 12,
-      fontFamily: 'Menlo',
+      fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
       fontSize: 13,
       color: colors.text,
       marginVertical: 10,
